@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+      "ms-python.isort",
+      "ms-python.black-formatter",
+      "ms-azuretools.vscode-docker",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-python.debugpy",
+      "streetsidesoftware.code-spell-checker"
+    ]
+  }
