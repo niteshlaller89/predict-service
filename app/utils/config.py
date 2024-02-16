@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     MODEL_PATH: str = "./ml/model/"
     MODEL_NAME: str = "model.pkl"
     INPUT_EXAMPLE: str = "./ml/model/examples/example.json"
-
+    IS_DEV: bool = False
     model_config = SettingsConfigDict(env_file=".env")
 
 
