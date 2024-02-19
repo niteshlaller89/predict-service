@@ -3,12 +3,13 @@ from __future__ import annotations
 import json
 import logging
 from sys import stdout
+from typing import Any, Mapping
 
-from loguru import Logger, Record, logger
+from loguru import logger
 from utils.config import settings
 
 
-def serialize(record: Record) -> str:
+def serialize(record: Mapping[str, Any]) -> str:
     subset = {
         "timestamp": record["time"].utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
         "message": record["message"],
@@ -25,7 +26,7 @@ def serialize(record: Record) -> str:
     return json.dumps(subset)
 
 
-def patching(record: Record) -> None:
+def patching(record: Mapping[str, Any]) -> None:
     record["extra"]["serialized"] = serialize(record)
 
 
@@ -35,7 +36,7 @@ class CustomLogger:
         logging.basicConfig(level=level)
 
         if not is_dev:
-            self._logger: Logger = logger.patch(patching)
+            self._logger: Any = logger.patch(patching)
             self._logger.add(stdout, level=level, format="{extra[serialized]}", backtrace=True)
         else:
             self._logger = logger.bind(service=settings.APP_NAME)
@@ -46,10 +47,10 @@ class CustomLogger:
                 backtrace=True,
             )
 
-    def get_instance(self) -> Logger:
+    def get_instance(self) -> Any:
         return self._logger
 
 
-log: Logger = CustomLogger(
+log: Any = CustomLogger(
     level=logging.getLevelName(settings.LOGGING_LEVEL), is_dev=settings.IS_DEV
 ).get_instance()

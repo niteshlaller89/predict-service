@@ -1,17 +1,17 @@
 from fastapi import APIRouter, HTTPException
 from models.prediction import MachineLearningDataInput, MachineLearningResponse
-from services.predict import MachineLearningModelHandlerScore as model
+from services.predict import TPredictService
 from utils.types import DataInput
 
 router = APIRouter()
 
 
 @router.post(
-    "/predict",
-    response_model=MachineLearningResponse,
-    name="predict:get-data",
+    "/predict", response_model=MachineLearningResponse, name="predict:get-data", summary=""
 )
-async def predict(data_input: MachineLearningDataInput) -> MachineLearningResponse:
+async def predict(
+    data_input: MachineLearningDataInput, service: TPredictService
+) -> MachineLearningResponse:
 
     if not data_input:
         raise HTTPException(status_code=404, detail="'data_input' argument invalid!")
@@ -20,7 +20,7 @@ async def predict(data_input: MachineLearningDataInput) -> MachineLearningRespon
 
         ## Change this portion for other types of models
         ## Add the correct type hinting when completed
-        prediction = model.predict(data_point)
+        prediction = service.predict(data_point)
 
     except Exception as err:
         raise HTTPException(status_code=500, detail=f"Exception: {err}")

@@ -1,41 +1,24 @@
 import os
-from typing import Any
+from typing import Annotated, Any
 
-import joblib
+from fastapi import Depends
 from loguru import logger
 from utils.errors import ModelLoadException, PredictException
-from utils.types import DataInput, ModelLoadWrapperType, ModelPredictorMethod
+from utils.types import DataInput, ModelLoadWrapper
 
 from app.utils.config import settings
 
 
-class MachineLearningModelHandlerScore(object):
-    model = None
-    modelLoadWrapper: dict[ModelLoadWrapperType, Any] = {
-        ModelLoadWrapperType.JOBLIB: joblib.load,
-    }
+class PredictService:
+    def __init__(self, model_loader: Any = ModelLoadWrapper.JOBLIB):
+        (load_method, model_predictor_method) = model_loader
+        self.model = self.load(load_method)
+        if hasattr(self.model, model_predictor_method):
+            self.predictor = getattr(self.model, model_predictor_method)
+        else:
+            raise PredictException(f"'{model_predictor_method}' attribute is missing")
 
-    @classmethod
-    def predict(
-        cls,
-        input: DataInput,
-        load_wrapper_type: ModelLoadWrapperType = ModelLoadWrapperType.JOBLIB,
-        predict_method: ModelPredictorMethod = ModelPredictorMethod.PREDICT,
-    ):
-        model = cls.get_model(load_wrapper_type)
-        if hasattr(model, predict_method):
-            return getattr(model, predict_method)(input)
-        raise PredictException(f"'{predict_method}' attribute is missing")
-
-    @classmethod
-    def get_model(cls, load_wrapper_type: ModelLoadWrapperType = ModelLoadWrapperType.JOBLIB):
-        if cls.model is None and load_wrapper_type in ModelLoadWrapperType:
-            load_wrapper_method = cls.modelLoadWrapper[load_wrapper_type]
-            cls.model = cls.load(load_wrapper_method)
-        return cls.model
-
-    @staticmethod
-    def load(load_wrapper_method: Any):
+    def load(self, load_wrapper_method: Any):
         model = None
         if settings.MODEL_PATH.endswith("/"):
             path = f"{settings.MODEL_PATH}{settings.MODEL_NAME}"
@@ -51,3 +34,13 @@ class MachineLearningModelHandlerScore(object):
             logger.error(message)
             raise ModelLoadException(message)
         return model
+
+    def predict(self, input: DataInput):
+        return self.predictor(input)
+
+
+def get_predict_service() -> PredictService:
+    return PredictService()
+
+
+TPredictService = Annotated[PredictService, Depends(get_predict_service)]

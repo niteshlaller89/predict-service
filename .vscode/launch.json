@@ -22,7 +22,8 @@
                 "8282",
                 "--reload"
             ],
-            "jinja": true
+            "jinja": true,
+            "justMyCode": false
         }
     ]
 }

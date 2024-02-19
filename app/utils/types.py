@@ -1,14 +1,10 @@
-from enum import Enum
-from typing import Any
+from typing import Any, Callable
 
+import joblib
 import numpy.typing as npt
 
 DataInput = npt.NDArray[Any]
 
 
-class ModelLoadWrapperType(Enum):
-    JOBLIB = "joblib.load"
-
-
-class ModelPredictorMethod(str, Enum):
-    PREDICT = "predict"
+class ModelLoadWrapper:
+    JOBLIB: tuple[Callable[..., Any], str] = (joblib.load, "predict")  # type: ignore

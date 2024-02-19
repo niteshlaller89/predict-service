@@ -24,21 +24,6 @@ To update your machine learning model, add your `load` and `method` [change here
 poetry shell
 poetry install
 ```
-## VSCode Settings
-
-Install recommended extensions.
-
-Add below settings to (View > Command Palette... and run Preferences: Open User Settings (JSON)):
-  ```
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true,
-    },
-  },
-  "isort.args":["--profile", "black"],
-  ```
 
 ## Runnning Localhost
 
