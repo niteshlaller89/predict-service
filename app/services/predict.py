@@ -3,10 +3,10 @@ from typing import Annotated, Any
 
 from fastapi import Depends
 from loguru import logger
-from utils.errors import ModelLoadException, PredictException
-from utils.types import DataInput, ModelLoadWrapper
 
 from app.utils.config import settings
+from app.utils.errors import ModelLoadException, PredictException
+from app.utils.types import DataInput, ModelLoadWrapper
 
 
 class PredictService:
@@ -18,7 +18,7 @@ class PredictService:
         else:
             raise PredictException(f"'{model_predictor_method}' attribute is missing")
 
-    def load(self, load_wrapper_method: Any):
+    def load(self, load_wrapper_method: Any) -> Any:
         model = None
         if settings.MODEL_PATH.endswith("/"):
             path = f"{settings.MODEL_PATH}{settings.MODEL_NAME}"
@@ -35,7 +35,7 @@ class PredictService:
             raise ModelLoadException(message)
         return model
 
-    def predict(self, input: DataInput):
+    def predict(self, input: DataInput) -> Any:
         return self.predictor(input)
 
 

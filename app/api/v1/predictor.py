@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from models.prediction import MachineLearningDataInput, MachineLearningResponse
-from services.predict import TPredictService
-from utils.types import DataInput
+
+from app.models.prediction import MachineLearningDataInput, MachineLearningResponse
+from app.services.predict import TPredictService
+from app.utils.types import DataInput
 
 router = APIRouter()
 

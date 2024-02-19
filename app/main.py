@@ -1,8 +1,9 @@
-from api.health import router as health_router
-from api.v1 import router as api_router
 from fastapi import FastAPI
-from utils.config import settings
-from utils.logger import log
+
+from app.api.health import router as health_router
+from app.api.v1 import router as api_router
+from app.utils.config import settings
+from app.utils.logger import log
 
 
 def get_application() -> FastAPI:

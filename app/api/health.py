@@ -1,11 +1,11 @@
 import json
 
 from fastapi import APIRouter, HTTPException
-from models.prediction import HealthResponse, MachineLearningDataInput
-from services.predict import TPredictService
-from utils.types import DataInput
 
+from app.models.prediction import HealthResponse, MachineLearningDataInput
+from app.services.predict import TPredictService
 from app.utils.config import settings
+from app.utils.types import DataInput
 
 router = APIRouter()
 
@@ -25,5 +25,5 @@ async def health(service: TPredictService) -> HealthResponse:
         service.predict(test_point)
         is_health = True
         return HealthResponse(status=is_health)
-    except Exception as exp:
+    except Exception:
         raise HTTPException(status_code=404, detail="Unhealthy")

@@ -1,6 +1,6 @@
 from typing import Any, Callable
 
-import joblib
+import joblib  # type: ignore
 import numpy.typing as npt
 
 DataInput = npt.NDArray[Any]

@@ -6,7 +6,8 @@ from sys import stdout
 from typing import Any, Mapping
 
 from loguru import logger
-from utils.config import settings
+
+from app.utils.config import settings
 
 
 def serialize(record: Mapping[str, Any]) -> str:
