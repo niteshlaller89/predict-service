@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1 import predictor
+from app.api.v1 import predict
 
 router = APIRouter()
-router.include_router(predictor.router, tags=["predictor"], prefix="/v1")
+router.include_router(predict.router, tags=["predictor"], prefix="/v1")

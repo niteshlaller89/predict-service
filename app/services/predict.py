@@ -1,7 +1,7 @@
 import os
 from typing import Annotated, Any
 
-from fastapi import Depends
+from fastapi import Depends, File
 from loguru import logger
 
 from app.utils.config import settings
@@ -10,7 +10,7 @@ from app.utils.types import DataInput, ModelLoadWrapper
 
 
 class PredictService:
-    def __init__(self, model_loader: Any = ModelLoadWrapper.JOBLIB):
+    def __init__(self, model_loader: Any = ModelLoadWrapper.CUSTOM):
         (load_method, model_predictor_method) = model_loader
         self.model = self.load(load_method)
         if hasattr(self.model, model_predictor_method):
@@ -35,7 +35,7 @@ class PredictService:
             raise ModelLoadException(message)
         return model
 
-    def predict(self, input: DataInput) -> Any:
+    def predict(self, input: DataInput, file: File) -> Any:
         return self.predictor(input)
 
 

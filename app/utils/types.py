@@ -7,4 +7,5 @@ DataInput = npt.NDArray[Any]
 
 
 class ModelLoadWrapper:
-    JOBLIB: tuple[Callable[..., Any], str] = (joblib.load, "predict")  # type: ignore
+    CUSTOM: tuple[Callable[..., Any], str] = (joblib.load, "predict")  # type: ignore
+    # ModelLoadWrapperType.AZURE:  tuple[Callable[..., Any], str] = ()
